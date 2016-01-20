@@ -4,7 +4,9 @@
   "description": "events",
   "main": "src/application.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+      "prestart": "mongodb-server/bin/mongod --dbpath db --port 4000 --logpath logs/mongo",
+      "start": "node src/eventstorecheck.js",
+      "poststop": "mongodb-server/bin/mongo admin --eval 'db.shutdownServer()' > logs/mongo"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/MamathaNair/microservices/issues"
   },
-  "homepage": "https://github.com/MamathaNair/microservices#readme"
+  "homepage": "https://github.com/MamathaNair/microservices#readme",
+  "devDependencies": {
+    "amqplib": "^0.4.0",
+    "eventstore": "^1.5.3"
+  }
 }
