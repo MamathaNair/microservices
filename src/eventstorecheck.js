@@ -24,8 +24,11 @@ es.on('disconnect', function () {
 });
 es.init(function (err) {
     console.log("event store initialized");
+    if(err){
+        console.log(err);
+    }
 });
 
 var event1 = {aggregateId: 'aggregate1', commitId: 'commit1'};
 
-//es.store.addEvents([event1]);
+es.store.addEvents([event1]);

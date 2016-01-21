@@ -4,9 +4,9 @@
   "description": "events",
   "main": "src/application.js",
   "scripts": {
-      "prestart": "mongodb-server/bin/mongod --dbpath db --port 4000 --logpath logs/mongo",
+      "prestart": "./prestartScripts.sh",
       "start": "node src/eventstorecheck.js",
-      "poststop": "mongodb-server/bin/mongo admin --eval 'db.shutdownServer()' > logs/mongo"
+      "poststop": "./postStopScripts.sh"
   },
   "repository": {
     "type": "git",

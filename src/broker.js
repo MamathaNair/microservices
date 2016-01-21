@@ -1,41 +1,43 @@
 var amqp = require('amqplib/callback_api');
 
-var q = 'idqueue';
 
 module.exports = {
 
-    closeChannelOnTimeOut: function(conn, timeOutInMilliseconds){
-        setTimeout(function() {
-            conn.close();
-            console.log(" [AMQP] Timed out...closing connection and exiting");
-            process.exit(0) ;
-        }, timeOutInMilliseconds);
 
-    },
-
-    sendMessageToQ: function (stringMessage){
+   sendMessageToQ: function (q,stringMessage){
         amqp.connect('amqp://localhost', function(err, conn) {
             conn.createChannel(function(err, ch) {
                 ch.assertQueue(q, {durable: false});
                 ch.sendToQueue(q, new Buffer(stringMessage));
-                console.log(" [AMQP] Sent "+stringMessage);
+                console.log(" [AMQP] Sent message to "+q);
+                console.log(stringMessage);
+                conn.close();
+                console.log(" [AMQP] Closed connection "+q);
             });
-            this.closeChannelOnTimeOut(conn,500);
+            setTimeout(function() {
+                conn.close();
+                console.log(" [AMQP] Timed out...closing connection and exiting "+q);
+            }, 10000);
         });
     },
 
 
 
-    getMessageFromQ: function (){
+    getMessageFromQ: function (q){
         amqp.connect('amqp://localhost', function(err, conn) {
             conn.createChannel(function(err, ch) {
                 ch.assertQueue(q, {durable: false});
-                console.log(" [AMQP] Waiting for messages in %s. To exit press CTRL+C", q);
+                console.log(" [AMQP] Waiting for messages in "+q+". To exit press CTRL+C", q);
                 ch.consume(q, function(msg) {
                     console.log(" [AMQP] Received %s", msg.content.toString());
                 },{noAck: true});
+                conn.close();
+                console.log(" [AMQP] Closed connection "+q);
             });
-            this.closeChannelOnTimeOut(conn,1000);
+            setTimeout(function() {
+                conn.close();
+                console.log(" [AMQP] Timed out...closing connection and exiting "+q);
+            }, 10000);
         });
     }
 
