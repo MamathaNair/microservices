@@ -1,0 +1,34 @@
+var fs = require('fs')
+
+module.exports = {
+
+    data : {
+        pages: [
+            {
+                pageId: "id1",
+                pageName: "name1",
+                description: "this is a new data page",
+                timestamp: "16-1-2016 10:10:10"
+            },
+            {
+                pageId: "id2",
+                pageName: "name2",
+                description: "this is a new data page 2",
+                timestamp: "17-1-2016 10:10:11"
+            },
+            {
+                pageId: "id3",
+                pageName: "name3",
+                description: "this is a new data page",
+                timestamp: "18-1-2016 10:10:12"
+            }
+        ]
+    },
+
+    getDataFromGateWay: function (){;
+        broker.sendMessageToQ("q2",data.pages);
+        return data.pages;
+    }
+
+};
+
